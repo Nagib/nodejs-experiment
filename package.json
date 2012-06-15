@@ -1,0 +1,28 @@
+{
+    "name": "nodejs-experiment",
+    "version": "0.1.0",
+    "author": "Cesar Canassa <cesar.canassa@gmail.com>",
+    "description": "",
+    "contributors": [
+        {
+            "name": "Cesar Canassa",
+            "email": "cesar.canassa@gmail.com"
+        },
+        {
+            "name": "Nagib Kanaan",
+            "email": "nagibckanaan@gmail.com"
+        }
+    ],
+    "main": "./lib/http-server",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Nagib/nodejs-experiment.git"
+    },
+    "dependencies" : {
+        "socket.io":  "x"
+    },
+    "license": "MIT",
+    "engine": {
+        "node": ">=0.4"
+    }
+}

@@ -17,18 +17,33 @@ function handler (req, res) {
   });
 }
 
-var ball = {
-  x: 100,
-  y: 0
-}
+var players = {};
 
 io.sockets.on('connection', function (socket) {
+  console.log(socket.id);
+
+  players[socket.id] = {
+    x: 0,
+    y: 0
+  }
+
+  socket.emit('set_pos', players);
+
+  /*
   setInterval(function () {
     socket.emit('set_pos', ball);
   }, 100);
+  */
 
-  socket.on('get_pos', function (data) {
-    ball = data;
+  socket.on('disconnect', function () {
+    console.log('disconnect!');
+    delete players[socket.id];
+  });
+
+  socket.on('set_pos', function (data) {
+    players[socket.id] = data;
+    console.log(players);
+    socket.broadcast.emit('set_pos', players);
   });
 
     /*

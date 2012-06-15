@@ -13,7 +13,7 @@ body {
     height: 100%;
 }
 
-#ball {
+.ball {
     position: absolute;
     width: 50px;
     height: 50px;
@@ -21,7 +21,7 @@ body {
     top: 0px;
     background: purple;
     border-radius: 50px;
-    -webkit-transition: all 1s linear;
+    -webkit-transition: all 200ms linear;
 }
 </style>
 
@@ -35,16 +35,51 @@ var socket = io.connect('/');
 //    socket.emit('get_pos', {});
 //}, 50);
 
-socket.on('set_pos', function (data) {
-    //$('#ball').animate({left: data.x, top: data.y}, {queue: false, duration: 200});
-    $('#ball').css({left: data.x, top: data.y});
-    //socket.emit('my other event', { my: 'data' });
+var me = {};
+
+socket.on('set_pos', function (players) {
+    //console.log(socket.socket.sessionid);
+    Object.keys(players).forEach(function(id) {
+        //debugger;
+        console.log('set_pos');
+        var $player = $('.ball[data-id=' + id + ']')
+        if (!$player.length) {
+            $player = $('<div class="ball" data-id="' + id + '"></div>').appendTo('body');
+        }
+
+        $player.css({left: players[id].x, top: players[id].y});
+    });
+
+    me = players[socket.socket.sessionid];
+});
+
+$('html').bind('keydown', function (e) {
+    console.log(e.which);
+    switch(e.which) {
+        case 39: // right
+            me.x += 100;
+            break;
+        case 40: // down
+            me.y += 100;
+            break;
+        case 37: // left
+            me.x -= 100;
+            break;
+        case 38: // up
+            me.x -= 100;
+            break;
+    }
+
+    //debugger;
+    socket.emit('set_pos', me);
+    console.log($('<div class="ball" data-id="' + socket.socket.sessionid + '"></div>'), {left: me.x, top: me.y});
+    $('.ball[data-id=' + socket.socket.sessionid + ']').css({left: me.x, top: me.y});
 });
 </script>
 
     <head>
 
     <body>
-        <div id="ball"></div>
+        <!-- <div id="ball"></div> -->
     </body>
 </html>
